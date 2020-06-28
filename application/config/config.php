@@ -539,5 +539,5 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 $config['fcm_api_key'] = "AAAAN45N6Kw:APA91bHyP_eXmfe0s5G-N_a7giNzIzf7sAlZLiuJzOzOb3BHBUpnbXIAiaSkADN9j3g6fUVFqEo-DLRITwHbsoORJDQQvGo52ZZE0KYNIRwvmCs1Xm7V7HspOq4KLnKRuYJBMt-XIa-r";
-$config['sender_email'] = "your hosting email address";
-$config['sender_name'] = "sender name";
+$config['sender_email'] = "roqak1@gmail.com";
+$config['sender_name'] = "Akin";
