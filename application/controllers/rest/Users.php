@@ -729,6 +729,31 @@ class Users extends API_Controller
 
 	}
 
+	function verifypaypal_post($a,$b,$c,$user_id)
+	{
+// validation rules for user register
+$rules = array(
+	array(
+		'field' => 'user_id',
+		'rules' => 'required|callback_id_check[User]'
+	)
+);
+
+// exit if there is an error in validation,
+if ( !$this->is_valid( $rules )) exit;
+
+$user_data = array(
+	"user_verified"     => 1
+);
+
+if ( !$this->User->save($user_data, $user_id)) {
+	$this->error_response( get_msg( 'err_user_user_verification' )); 
+}
+
+        $this->success_response( get_msg("User Verification Successful" ));
+
+	}
+
 	/**
 	* Trigger to delete user related data when user is deleted
 	* delete user related data
