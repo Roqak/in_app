@@ -127,7 +127,9 @@ class Users extends API_Controller
 
 	        	if ( !send_user_register_email( $user_data['user_id'], $subject )) {
 
-					$this->error_response( get_msg( 'user_register_success_but_email_not_send' ));
+					// $this->error_response( get_msg( 'user_register_success_but_email_not_send' ));
+					$this->error_response( get_msg( 'user registered successfully but email not sent' ));
+
 				
 				} 
         	}
@@ -140,7 +142,9 @@ class Users extends API_Controller
 
        		if ( !send_user_register_email( $user_id, $subject )) {
 
-					$this->error_response( get_msg( 'user_register_successful_but_email_not_sent' ));
+					// $this->error_response( get_msg( 'user_register_success_but_email_not_send' ));
+					$this->error_response( get_msg( 'user registered successfully but email not sent' ));
+
 				
 				} 
 
@@ -473,7 +477,9 @@ class Users extends API_Controller
 
 	        	if ( !send_user_register_email( $user_data['user_id'], $subject )) {
 
-					$this->error_response( get_msg( 'user_register_success_but_email_not_send' ));
+					// $this->error_response( get_msg( 'user_register_success_but_email_not_send' ));
+					$this->error_response( get_msg( 'user registered successfully but email not sent' ));
+
 				
 				}
 					
