@@ -12,7 +12,7 @@ class Verification extends BE_Controller
      */
     function __construct()
     {
-        parent::__construct(MODULE_CONTROL, 'register_user_module');
+        parent::__construct(MODULE_CONTROL, 'Verified Users');
     }
 
     /**
