@@ -10,7 +10,10 @@
 
 			<h2>
 				<label class="login-title">
-					<?php echo $site_name; ?>
+					<?php 
+					// echo $site_name; 
+					echo "Inmarket";
+					?>
 				</label>
 			</h2>
 			<hr/>
