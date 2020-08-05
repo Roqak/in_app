@@ -15,6 +15,7 @@
             <th><?php echo get_msg('Relative 2 Phone') ?></th>
             <th><?php echo get_msg('State') ?></th>
             <th><?php echo get_msg('Official ID') ?></th>
+            <th><?php echo get_msg('First Timer') ?></th>
         </tr>
 
         <?php $count = $this->uri->segment(4) or $count = 0; ?>
