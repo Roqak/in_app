@@ -39,7 +39,7 @@
                     <td><?php echo $user->state; ?></td>
                     <td>
                         <button class="btn btn-sm btn-primary-green ban" userid=''>
-                            <a href='<?php echo $module_site_url . '/download/' . $user->official_id ?>'>
+                            <a href='<?php echo base_url() . 'uploads/loans/' . $user->official_id ?>' target="_blank">
                                 <?php echo get_msg('download'); ?>
                             </a>
                         </button>
