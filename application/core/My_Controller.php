@@ -1,9 +1,11 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-require_once( APPPATH .'libraries/REST_Controller.php' );
+require_once(APPPATH . 'libraries/REST_Controller.php');
 
-class My_Controller {}
+class My_Controller
+{
+}
 
 /**
  * PanaceaSoft Main Controller which extends the CI Controller
@@ -41,7 +43,7 @@ class PS_Controller extends CI_Controller
 	/**
 	 * constucts CI_Controller construction
 	 */
-	function __construct( $auth_level, $module_name )
+	function __construct($auth_level, $module_name)
 	{
 		parent::__construct();
 
@@ -51,24 +53,24 @@ class PS_Controller extends CI_Controller
 		$this->module_name = $module_name;
 
 		// base url and site url
-		$this->module_url = strtolower( get_class( $this ));
+		$this->module_url = strtolower(get_class($this));
 		$this->module_path = $this->module_url;
 
 		// load libraries
-		$this->load->library( 'PS_Auth' );
-		$this->load->library( 'PS_Image' );
-		$this->load->library( 'PS_Library' );
-		$this->load->library( 'PS_Security' );
-		$this->load->library( 'PS_Delete' );
+		$this->load->library('PS_Auth');
+		$this->load->library('PS_Image');
+		$this->load->library('PS_Library');
+		$this->load->library('PS_Security');
+		$this->load->library('PS_Delete');
 
 		// check authentication
-		if ( ! $this->authenticate()) {
-			redirect( 'login' );
+		if (!$this->authenticate()) {
+			redirect('login');
 		}
 
-		if ( $this->ps_auth->is_logged_in()) {
-		// load logged in user info if the use is logged in
-			
+		if ($this->ps_auth->is_logged_in()) {
+			// load logged in user info if the use is logged in
+
 			$this->load_userinfo();
 		}
 	}
@@ -77,12 +79,12 @@ class PS_Controller extends CI_Controller
 	 * Load Title & meta data
 	 * meta_type, meta_title, meta_desc, meta_keywords
 	 */
-	function load_metadata( $meta_data = array())
+	function load_metadata($meta_data = array())
 	{
 		// SEO Data
-		$meta_data['title'] = get_msg( 'site_name' ) . get_msg( 'title_bar_seperator' ) . ucfirst( strtolower( $this->module_name ));
+		$meta_data['title'] = get_msg('site_name') . get_msg('title_bar_seperator') . ucfirst(strtolower($this->module_name));
 
-		$meta_data['site_name'] = get_msg( 'site_name' );
+		$meta_data['site_name'] = get_msg('site_name');
 		$meta_data['module_name'] = $this->module_name;
 
 		// Folder Paths
@@ -94,16 +96,16 @@ class PS_Controller extends CI_Controller
 		$meta_data['mobule_base_url'] = $this->base_url();
 
 		// Backend and FE Urls
-		$meta_data['fe_url'] = site_url( $this->config->item( 'fe_url' ));
-		$meta_data['be_url'] = site_url( $this->config->item( 'be_url' ));
+		$meta_data['fe_url'] = site_url($this->config->item('fe_url'));
+		$meta_data['be_url'] = site_url($this->config->item('be_url'));
 
-		$this->load->vars( $meta_data );
+		$this->load->vars($meta_data);
 	}
 
 	/**
 	 * Loads an userinfo.
 	 */
-	function load_userinfo() 
+	function load_userinfo()
 	{
 		// get logged in user info
 		$user = $this->ps_auth->get_user_info();
@@ -112,20 +114,19 @@ class PS_Controller extends CI_Controller
 		$data['module_groups'] = $this->Module->get_groups_info()->result();
 		$data['user_info'] = $user;
 
-		if ( $this->ps_auth->is_system_admin() ) {
-		// if the user is system admin, load all modules and access
+		if ($this->ps_auth->is_system_admin()) {
+			// if the user is system admin, load all modules and access
 
 			$data['allowed_modules'] = $this->Module->get_all()->result();
 			$data['allowed_accesses'] = $this->Role->get_all()->result();
-
 		} else {
 
 			// load allowed modules and access
-			$data['allowed_modules'] = $this->Module->get_allowed_modules( $user->user_id )->result();
-			$data['allowed_accesses'] = $this->Role->get_allowed_accesses( $user->role_id );
+			$data['allowed_modules'] = $this->Module->get_allowed_modules($user->user_id)->result();
+			$data['allowed_accesses'] = $this->Role->get_allowed_accesses($user->role_id);
 		}
-		
-		$this->load->vars( $data );
+
+		$this->load->vars($data);
 	}
 
 	/**
@@ -135,18 +136,18 @@ class PS_Controller extends CI_Controller
 	 */
 	function authenticate()
 	{
-		if ( $this->auth_level == LOGIN_CONTROL ) {
-		// if authentication level is login only 
-			
-			return $this->ps_auth->validate();
-		} elseif ( $this->auth_level == MODULE_CONTROL ) {
-		// if authentication level is until module
-			
-			return $this->ps_auth->validate( $this->module_name );
-		} elseif ( $this->auth_level == ROLE_CONTROL ) {
-		// if authentication level is until role, check if the user is system user
+		if ($this->auth_level == LOGIN_CONTROL) {
+			// if authentication level is login only 
 
-			if ( !$this->ps_auth->validate()) return false;
+			return $this->ps_auth->validate();
+		} elseif ($this->auth_level == MODULE_CONTROL) {
+			// if authentication level is until module
+
+			return $this->ps_auth->validate($this->module_name);
+		} elseif ($this->auth_level == ROLE_CONTROL) {
+			// if authentication level is until role, check if the user is system user
+
+			if (!$this->ps_auth->validate()) return false;
 
 			return $this->ps_auth->is_system_user();
 		}
@@ -159,16 +160,16 @@ class PS_Controller extends CI_Controller
 	 *
 	 * @param      <type>  $view   The view
 	 */
-	function load_view( $view, $data = false )
+	function load_view($view, $data = false)
 	{
-		if ( !empty( $this->template_path )) {
-		// if the template path is not empty,
-			
-			$this->load->view( $this->template_path .'/'. $view, $data );	
+		if (!empty($this->template_path)) {
+			// if the template path is not empty,
+
+			$this->load->view($this->template_path . '/' . $view, $data);
 		} else {
-		// if the template path is empty
-			
-			$this->load->view( $view );	
+			// if the template path is empty
+
+			$this->load->view($view);
 		}
 	}
 
@@ -177,35 +178,18 @@ class PS_Controller extends CI_Controller
 	 *
 	 * @param      <type>  $view   The view
 	 */
-	function load_template( $view = false ) 
+	function load_template($view = false)
 	{
 		// load header
-		$this->load_view( 'partials/header', $this->data );
+		$this->load_view('partials/header', $this->data);
 
 		// load view
-		if ( !empty( $view )){
-			$this->load_view( $view );
+		if (!empty($view)) {
+			$this->load_view($view);
 		}
 
 		// load footer
-		$this->load_view( 'partials/footer' );
-	}
-
-		/**
-	 * Loads a template.
-	 *
-	 * @param      <type>  $view   The view
-	 */
-	function load_detail( $data ) 
-	{
-		// load header
-		$this->load_view( 'partials/header', $data );
-
-		// load view
-		$this->load_view( 'partials/detail' );
-
-		// load footer
-		$this->load_view( 'partials/footer' );
+		$this->load_view('partials/footer');
 	}
 
 	/**
@@ -213,16 +197,16 @@ class PS_Controller extends CI_Controller
 	 *
 	 * @param      <type>  $view   The view
 	 */
-	function load_list( $data ) 
+	function load_detail($data)
 	{
 		// load header
-		$this->load_view( 'partials/header', $data );
+		$this->load_view('partials/header', $data);
 
 		// load view
-		$this->load_view( 'partials/list' );
+		$this->load_view('partials/detail');
 
 		// load footer
-		$this->load_view( 'partials/footer' );
+		$this->load_view('partials/footer');
 	}
 
 	/**
@@ -230,16 +214,16 @@ class PS_Controller extends CI_Controller
 	 *
 	 * @param      <type>  $view   The view
 	 */
-	function load_list_language( $data ) 
+	function load_list($data)
 	{
 		// load header
-		$this->load_view( 'partials/header', $data );
+		$this->load_view('partials/header', $data);
 
 		// load view
-		$this->load_view( 'partials/language_list' );
+		$this->load_view('partials/list');
 
 		// load footer
-		$this->load_view( 'partials/footer' );
+		$this->load_view('partials/footer');
 	}
 
 	/**
@@ -247,16 +231,16 @@ class PS_Controller extends CI_Controller
 	 *
 	 * @param      <type>  $view   The view
 	 */
-	function load_form( $data ) 
+	function load_list_language($data)
 	{
 		// load header
-		$this->load_view( 'partials/header', $data );
+		$this->load_view('partials/header', $data);
 
 		// load view
-		$this->load_view( 'partials/form' );
+		$this->load_view('partials/language_list');
 
 		// load footer
-		$this->load_view( 'partials/footer' );
+		$this->load_view('partials/footer');
 	}
 
 	/**
@@ -264,16 +248,33 @@ class PS_Controller extends CI_Controller
 	 *
 	 * @param      <type>  $view   The view
 	 */
-	function load_language_form( $data ) 
+	function load_form($data)
 	{
 		// load header
-		$this->load_view( 'partials/header', $data );
+		$this->load_view('partials/header', $data);
 
 		// load view
-		$this->load_view( 'partials/language_form' );
+		$this->load_view('partials/form');
 
 		// load footer
-		$this->load_view( 'partials/footer' );
+		$this->load_view('partials/footer');
+	}
+
+	/**
+	 * Loads a template.
+	 *
+	 * @param      <type>  $view   The view
+	 */
+	function load_language_form($data)
+	{
+		// load header
+		$this->load_view('partials/header', $data);
+
+		// load view
+		$this->load_view('partials/language_form');
+
+		// load footer
+		$this->load_view('partials/footer');
 	}
 
 	/**
@@ -287,13 +288,13 @@ class PS_Controller extends CI_Controller
 		$this->data['load_gallery_js'] = true;
 
 		// load header
-		$this->load_view( 'partials/header', $this->data );
+		$this->load_view('partials/header', $this->data);
 
 		// load view
-		$this->load_view( 'partials/gallery' );
+		$this->load_view('partials/gallery');
 
 		// load footer
-		$this->load_view( 'partials/footer' );
+		$this->load_view('partials/footer');
 	}
 
 	/**
@@ -302,13 +303,13 @@ class PS_Controller extends CI_Controller
 	 * @param      <type>  $key    The key
 	 * @param      <type>  $value  The value
 	 */
-	function set_flash_msg( $key, $value )
+	function set_flash_msg($key, $value)
 	{
 		// get lanaguage
-		$message = get_msg( $value );
+		$message = get_msg($value);
 
 		// set flash data
-		$this->session->set_flashdata( $key, $message );
+		$this->session->set_flashdata($key, $message);
 	}
 
 	/**
@@ -318,15 +319,15 @@ class PS_Controller extends CI_Controller
 	 *
 	 * @return     <type>   ( description_of_the_return_value )
 	 */
-	function base_url( $path = false )
+	function base_url($path = false)
 	{
-		if ( $path ) {
-		// if the path is exists,
-			
-			return base_url( $this->module_url .'/'. $path );
+		if ($path) {
+			// if the path is exists,
+
+			return base_url($this->module_url . '/' . $path);
 		}
 
-		return base_url( $this->module_url );
+		return base_url($this->module_url);
 	}
 
 	/**
@@ -336,15 +337,15 @@ class PS_Controller extends CI_Controller
 	 *
 	 * @return     <type>   ( description_of_the_return_value )
 	 */
-	function module_site_url( $path = false )
+	function module_site_url($path = false)
 	{
-		if ( $path ) {
-		// if the path is exists,
-			
-			return site_url( $this->module_url .'/'. $path );
+		if ($path) {
+			// if the path is exists,
+
+			return site_url($this->module_url . '/' . $path);
 		}
 
-		return site_url( $this->module_url );
+		return site_url($this->module_url);
 	}
 
 	/**
@@ -354,13 +355,13 @@ class PS_Controller extends CI_Controller
 	 */
 	function is_POST()
 	{
-		return ( $this->input->method( TRUE ) == 'POST' );
+		return ($this->input->method(TRUE) == 'POST');
 	}
 
 	/**
 	 * provide pagination configuration
 	 */
-	function load_pag( $base_url, $rows_count )
+	function load_pag($base_url, $rows_count)
 	{
 		// load pagination
 		$pag = $this->config->item('pagination');
@@ -382,60 +383,60 @@ class PS_Controller extends CI_Controller
 	 *
 	 * @return     array   ( description_of_the_return_value )
 	 */
-	function searchterm_handler( $searchterms )
+	function searchterm_handler($searchterms)
 	{
-		if ( is_array( $searchterms )) {
-		// if searchterms is array
+		if (is_array($searchterms)) {
+			// if searchterms is array
 			$data = array();
-			
-			if ( $this->is_POST()) {
-			// if the method is post, set the searchterms
-				foreach ( $searchterms as $name => $term) {
-					if ( ! empty( $term) ) {
-					// if the term is not empty, keep in session
-						
-						$this->session->set_userdata( $name, $term );
+
+			if ($this->is_POST()) {
+				// if the method is post, set the searchterms
+				foreach ($searchterms as $name => $term) {
+					if (!empty($term)) {
+						// if the term is not empty, keep in session
+
+						$this->session->set_userdata($name, $term);
 						$data[$name] = $term;
 					} else {
-					// if the term is empty, remove from session
-						
+						// if the term is empty, remove from session
+
 						$this->session->unset_userdata($term);
 						$data[$name] = "";
 					}
 				}
 			} else {
-			// if the method is not POST, find in session
-				foreach ( $searchterms as $name => $term) {
-					if ( $this->session->userdata( $name )) {
-					// if found in session,
+				// if the method is not POST, find in session
+				foreach ($searchterms as $name => $term) {
+					if ($this->session->userdata($name)) {
+						// if found in session,
 						$data[$name] = $this->session->userdata($name);
-					} else { 
-					// if not found in session,
+					} else {
+						// if not found in session,
 						$data[$name] = "";
 					}
 				}
 			}
-			
+
 			// return the searchterm data
 			return $data;
 		} else {
-		// if search term is not array
+			// if search term is not array
 
-			if ( !empty( $searchterms )) {
-			// if searchterm is not empty, keep in session
-		        
-		        $this->session->set_userdata( $searchterms, $searchterms );
-		    } elseif ($this->session->userdata( $searchterms )) {
-		    // if searchterm is empty and found in session, take from session
-		        
-		        $searchterms = $this->session->userdata( $searchterms );
-		    } else {
-		    // else, clear the search term
-		        
-		        $searchterms ="";
-		    }
+			if (!empty($searchterms)) {
+				// if searchterm is not empty, keep in session
 
-	        return $searchterms;
+				$this->session->set_userdata($searchterms, $searchterms);
+			} elseif ($this->session->userdata($searchterms)) {
+				// if searchterm is empty and found in session, take from session
+
+				$searchterms = $this->session->userdata($searchterms);
+			} else {
+				// else, clear the search term
+
+				$searchterms = "";
+			}
+
+			return $searchterms;
 		}
 	}
 
@@ -446,9 +447,10 @@ class PS_Controller extends CI_Controller
 	 *
 	 * @return     boolean  True if has data, False otherwise.
 	 */
-	function has_data( $name ) {
+	function has_data($name)
+	{
 
-		return ( isset( $_POST[ $name ] ));
+		return (isset($_POST[$name]));
 	}
 
 	/**
@@ -458,22 +460,22 @@ class PS_Controller extends CI_Controller
 	 *
 	 * @return     boolean  The clean data.
 	 */
-	function get_data( $name )
+	function get_data($name)
 	{
-		if ( ! isset( $_POST[$name] )) {
-		// if there is no post variable with the name
-			
+		if (!isset($_POST[$name])) {
+			// if there is no post variable with the name
+
 			return false;
 		}
 
-		if ( is_array( $_POST[$name] )) {
-		// if the value is array,
-			
-			return $this->input->post( $name );
+		if (is_array($_POST[$name])) {
+			// if the value is array,
+
+			return $this->input->post($name);
 		}
 
 		// trim, htmlentites and return
-		return $this->ps_security->clean_input( trim( $this->input->post( $name )));
+		return $this->ps_security->clean_input(trim($this->input->post($name)));
 	}
 
 	/**
@@ -481,13 +483,14 @@ class PS_Controller extends CI_Controller
 	 *
 	 * @param      <type>  $action_id  The action identifier
 	 */
-	function check_access( $action_id ) {
-		
-		if ( ! $this->ps_auth->has_access( $action_id )) {
-		// if no add access for this module,
-		
-			$this->set_flash_msg( 'error', get_msg( 'err_access' ));
-			redirect( $this->module_site_url());
+	function check_access($action_id)
+	{
+
+		if (!$this->ps_auth->has_access($action_id)) {
+			// if no add access for this module,
+
+			$this->set_flash_msg('error', get_msg('err_access'));
+			redirect($this->module_site_url());
 		}
 	}
 
@@ -498,9 +501,9 @@ class PS_Controller extends CI_Controller
 	 */
 	function check_trans()
 	{
-		if ( $this->db->trans_status() === FALSE ) {
-        	
-        	// rollback the transaction
+		if ($this->db->trans_status() === FALSE) {
+
+			// rollback the transaction
 			$this->db->trans_rollback();
 			return false;
 		}
@@ -511,10 +514,10 @@ class PS_Controller extends CI_Controller
 	}
 }
 
-require_once( APPPATH .'core/FE_Controller.php' );
+require_once(APPPATH . 'core/FE_Controller.php');
 
-require_once( APPPATH .'core/BE_Controller.php' );
+require_once(APPPATH . 'core/BE_Controller.php');
 
-require_once( APPPATH .'core/API_Controller.php' );
+require_once(APPPATH . 'core/API_Controller.php');
 
-require_once( APPPATH .'core/Ajax_Controller.php' );
+require_once(APPPATH . 'core/Ajax_Controller.php');
