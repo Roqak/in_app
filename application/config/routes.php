@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -60,6 +60,8 @@ $route['login'] = "main/login";
 $route['logout'] = "main/logout";
 $route['reset_request'] = "main/reset_request";
 $route['reset_email/(.*)'] = "main/reset_email/$1";
+$route['verification/verify'] = "backend/verification/verify";
+$route['loan/application'] = "backend/loan/application";
 
 // if both backend and frontend exist,
 $route['admin'] = "backend/dashboard";

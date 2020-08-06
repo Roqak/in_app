@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
@@ -25,13 +25,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $config['base_url'] = 'http://localhost/inmarket/';
 
-if ( strlen( substr($_SERVER['REQUEST_URI'], 0, stripos($_SERVER['REQUEST_URI'], "index.php" ))) == 0) {
+if (strlen(substr($_SERVER['REQUEST_URI'], 0, stripos($_SERVER['REQUEST_URI'], "index.php"))) == 0) {
 	$config['base_url'] = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-
 } else {
 
-	$config['base_url']	= "http://" . $_SERVER['HTTP_HOST']. substr($_SERVER['REQUEST_URI'],0,stripos($_SERVER['REQUEST_URI'],"index.php"));
-
+	$config['base_url']	= "http://" . $_SERVER['HTTP_HOST'] . substr($_SERVER['REQUEST_URI'], 0, stripos($_SERVER['REQUEST_URI'], "index.php"));
 }
 
 /*
@@ -469,7 +467,9 @@ $config['csrf_exclude_uris'] = array(
 	'rest/.*?',
 	'admin/fileupload/.*?',
 	'userajax/.*?',
-	'guestajax/.*?'
+	'guestajax/.*?',
+	'verification/.*?',
+	'loan/.*?'
 );
 
 /*
